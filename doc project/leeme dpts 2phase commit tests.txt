@@ -1,0 +1,45 @@
+Microservicio con spring boot 2.0 para probar transacciones distribuidas con
+2 phase commit sobre empleados_simple y departamentos con atomikos jta
+
+* Escucha en el puerto 5555. Tenemos dos bds, empleados_simple con la tabla empleados y
+departamentos con dos tablas, departamentos y empleados_departamentos. Tenemos un
+AtomikosDataSourceBean por bd, un UserTransactionManager también de Atomikos que gestiona
+la transacción JTA y un JtaTransactionManager de Spring (que entiendo que lo gestiona todo
+de alguna manera). Todos estos objetos se inicializan en EmpleadosTxConfiguration.
+
+Para probar la transacción distribuida seguimos los siguientes pasos:
+
+- lanzamos el microservicio
+
+- reseteamos las dos bds lanzando el script desde el cliente de mysql
+
+- Desde postman lanzamos la petición create y asigna dpto. Esta petición inserta un empleado
+  nuevo en empleados y un registro nuevo en empleados_departamentos (ver API más abajo)
+  
+- lanzamos elimina de ese empleado. Ahora tenemos la tabla empleados original
+  y un registro 'inconsistente' en empleados_departamentos 
+  
+- lanzamos de nuevo create y asigna dpto. La inserción del empleado es correcta (porque en
+  el paso anterior hemos borrado ese empleado) pero la asignación del departamento (inserción
+  del registro en empleados_departamentos) falla porque ya existe ese registro, así que
+  se hace rollback de todo.
+  
+- Comprobamos que efectivamente se ha hecho rollback de la inserción del empleado.
+
+Clases involucradas:
+
+	- Dos daos - uno para cada bd.
+	  
+	- Una clase de negocio que define insertaEmpleadoYAsignaADpto(Empleado emp, String dptoId)
+	  
+	- Un controlador Rest que mapea a /empleados/ y sus derivados. Podemos probar con Postman. 
+	  Su api es:
+	
+		- GET /empleados/: devuelve todos los empleados
+		- GET /empleados/x: devuelve el empleado con cif x
+		- PUT /empleados/: modifica un empleado
+		- DELETE /empleados/x: elimina el empleado con cif x
+		- POST /empleados/: inserta un empleado
+		- POST /empleados/dptos/{dptoId}: inserta un empleado y lo asigna al dpto dptoId
+			
+	- Un controlador Home que redirige / a /index.jsp (con instrucciones básicas)

@@ -1,0 +1,43 @@
+spring:
+
+  application:
+     name: empleadosdpts-service
+      
+# Atomikos Datasources
+  jta:
+    atomikos:
+      # properties: Aquí irían properties para configurar el UserTransactionServiceImp
+      # (ver https://docs.spring.io/spring-boot/docs/2.3.0.BUILD-SNAPSHOT/api//org/springframework/boot/jta/atomikos/AtomikosProperties.html)
+      # para un listado de las propiedades soportadas)
+
+      empleadosdatasource:
+        unique-resource-name: empleadosDb
+        max-pool-size: 5
+        min-pool-size: 1
+        max-life-time: 20000
+        borrow-connection-timeout: 10000
+        xa-data-source-class-name: com.mysql.jdbc.jdbc2.optional.MysqlXADataSource
+#        xa-data-source-class-name: oracle.jdbc.xa.client.OracleXADataSource
+        xa-properties:
+          user: maza
+          password: maza
+          URL: jdbc:mysql://localhost:3306/empleados_simple
+
+      departamentosdatasource:
+        unique-resource-name: departamentosDb
+        max-pool-size: 5
+        min-pool-size: 1
+        max-life-time: 20000
+        borrow-connection-timeout: 10000
+        xa-data-source-class-name: com.mysql.jdbc.jdbc2.optional.MysqlXADataSource
+        xa-properties:
+          user: maza
+          password: maza
+          URL: jdbc:mysql://localhost:3306/departamentos
+
+server:
+# Puerto aleatorio
+#  port: ${PORT:0}
+  port: 5555
+  
+ 

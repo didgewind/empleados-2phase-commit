@@ -1,0 +1,25 @@
+Workspace con varios proyectos spring boot. Tenemos dos grupos.
+
+1 - App base. En distintas versiones de git tiramos de distintas versiones
+de spring boot (actualmente 1.5 y 2.0):
+
+* microservices-demo-master: proyecto en el que me he basado. Tiene un leeme propio.
+
+* empleados spring-boot: microservicio rest de empleados tirando de mysql. 
+
+* eureka: servicio de descubrimiento y registro. Es lo primero que hay que lanzar.
+
+* empleados web: web de empleados tirando de los servicios anteriores
+
+* auth-server: para autenticarse con jwt
+
+Está todo muy basado en el primer proyecto, sacado de https://spring.io/blog/2015/07/14/microservices-with-spring
+
+2 - Proyectos de apoyo para los cursos. Tiran de spring boot 2.0
+
+* empleados-db: microservicio que simula una bd (para no meternos con acceso a db's en el curso). Hay
+un ejemplo de gestión de errores
+
+* hellorest: microservicio de ejemplo hola mundo
+
+* hello web: cliente de ejemplo hola mundo

@@ -1,0 +1,15 @@
++ Diferencia entre AtomikosDataSourceBean de Spring y de Atomikos: prácticamente
+ninguna. El de spring hereda del de Atomikos y añade el nombre del bean y poco más.
+
++ Diferencia entre driver normal de mysql y el XA: creo que el xa es necesario
+porque así el driver está preparado para el 2 phase commit
+(ref en https://mysqlserverteam.com/improvements-to-xa-support-in-mysql-5-7/)
+
+- ¿Atomikos hace lock sobre todos los ds? Quizás puedo tener un fine grained control
+con otras clases de atomikos (el AtomikosTxManager, quizás...)?: parece que no. Sólo hace
+locks sobre los ds's involucrados en una transacción.
+
+- Elegir los ds por petición: quizás con aop podemos meter y sacar recursos en el
+AtomikosTxManager...: no es necesario. Entiendo que Atomikos va añadiendo los
+AtomikosDataSourceBean al txmanager para su sincronización SEGÚN SE VAN UTILIZANDO.
+Así que en realidad sólo necesitaríamos configurarlo todo y fuera.
